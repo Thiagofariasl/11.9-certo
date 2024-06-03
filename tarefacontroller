@@ -1,0 +1,49 @@
+package com.example.fj21tarefas.controller;
+
+
+import com.example.fj21tarefas.model.Tarefa;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.time.LocalDate;
+import java.util.Random;
+
+
+@Controller
+public class tarefacontroller {
+
+    @Autowired
+    private TarefaRepository tarefaRepository;
+
+    @RequestMapping("novaTarefa")
+    public String form() {
+        return "tarefa/formulario";
+    }
+
+    @RequestMapping("adicionaTarefa")
+    public String adiciona(Tarefa tarefa) {
+        tarefaRepository.save(tarefa);
+        return "tarefa/adicionada";
+    }
+
+
+
+
+
+    @RequestMapping("/teste")
+    public String teste(Model model){
+        Tarefa tarefa = new Tarefa();
+        tarefa.setDescricao("tarefa numero "+ new Random().nextInt());
+        tarefa.setFinalizado(false);
+        tarefa.setDataFinalizacao(LocalDate.now());
+
+
+        tarefaRepository.save(tarefa);
+
+        model.addAttribute("tarefas", tarefaRepository.findAll());
+        return "tarefas";
+    }
+
+}
